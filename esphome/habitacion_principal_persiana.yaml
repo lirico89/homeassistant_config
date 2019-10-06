@@ -1,0 +1,102 @@
+esphome:
+  name: habitacion_principal_persiana
+  platform: ESP8266
+  board: esp01_1m
+  on_boot:
+    priority: -100
+    then:
+      - cover.open: control_persianas
+    
+wifi:
+  ssid: !secret SSID
+  password: !secret pass_SSID
+  fast_connect: true
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "habitacion_persiana Fallback"
+    password: !secret pass_SSID
+
+# Enable logging
+logger:
+
+ota:
+
+api:
+
+web_server:
+  port: 80
+
+sensor:
+  - platform: wifi_signal
+    name: Habitacion Principal Persiana Wifi Signal
+    update_interval: 10s
+  - platform: uptime
+    name: Habitacion Principal Persiana test Uptime
+
+binary_sensor:
+  - platform: status
+    name: Habitacion Principal Persiana Status
+
+  - platform: gpio
+    name: "Boton Subir"
+    pin: 0
+    internal: true
+    filters:
+      - invert:
+    on_press:
+        - cover.open: control_persianas
+    on_release:
+      then:
+        - cover.stop: control_persianas
+
+  - platform: gpio
+    name: "Boton Bajar"
+    pin: 9
+    internal: true
+    filters:
+      - invert:
+    on_press:
+      then:
+        - cover.close: control_persianas
+    on_release:
+      then:
+        - cover.stop: control_persianas
+
+
+switch:
+  - platform: restart
+    name: "Reiniciar Persianas"  
+  
+  - platform: gpio
+    name: "Rele Subir"
+    pin: 12
+    restore_mode: ALWAYS_OFF
+    id: rele_subir
+    interlock: [rele_bajar]   
+    
+  - platform: gpio
+    name: "Rele Bajar"
+    pin: 5
+    restore_mode: ALWAYS_OFF
+    id: rele_bajar
+    interlock: [rele_subir]
+
+    
+cover:
+  - platform: time_based
+    device_class: shutter
+    name: "Persiana Habitación"
+    id: control_persianas
+    
+    open_action:
+      - switch.turn_on: rele_subir
+    open_duration: 25s
+
+    close_action:
+      - switch.turn_on: rele_bajar
+    close_duration: 25s
+
+    stop_action:
+      - switch.turn_off: rele_subir
+      - switch.turn_off: rele_bajar
+

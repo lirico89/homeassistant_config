@@ -1,0 +1,40 @@
+esphome:
+  name: esp01_test
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret SSID
+  password: !secret pass_SSID
+  fast_connect: true
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp01-Test Fallback Hotspot"
+    password: "wlYwp69N639g"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Web Server
+
+web_server:
+  port: 80
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+sensor:
+  - platform: wifi_signal
+    name: esp01-test Wifi Signal
+    update_interval: 10s
+  - platform: uptime
+    name: esp01-test test Uptime
+    
+switch:
+  - platform: gpio
+    name: "Relay"
+    pin: 2

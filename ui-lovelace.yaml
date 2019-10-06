@@ -1,0 +1,59 @@
+title: Casa
+views:
+    # View tab title.
+  - title: Inicio
+    cards:
+    
+      - type: vertical-stack
+        cards:
+          - type: weather-forecast
+            entity: weather.casa
+          - type: media-control
+            entity: media_player.salon
+      
+
+      - type: vertical-stack
+        cards:
+          - type: entities
+            title: Entrada
+            show_header_toggle: false
+            entities:
+              - entity: binary_sensor.pir_entrada
+              - entity: switch.luces_entrada        
+          - type: entities
+            title: Habitación Principal
+            show_header_toggle: false
+            entities:
+              - entity: switch.luces_habitacion_principal
+              - entity: cover.persiana_habitacion
+
+
+
+
+        
+        
+  - title: Entrada
+    cards:
+      - type: glance
+        title: Sensores
+        entities:
+          - entity: binary_sensor.pir_entrada
+          - entity: switch.luces_entrada
+            tap_action:
+              action: toggle
+  - title: Cocina
+  - title: Salón
+  - title: Habitación Principal
+    cards:
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: switch.luces_habitacion_principal
+            tap_action:
+              action: toggle
+          - entity: cover.persiana_habitacion
+
+  - title: Habitación David
+  - title: Habitación Idoia
+  - title: Baño
+  

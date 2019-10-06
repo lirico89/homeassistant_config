@@ -1,0 +1,56 @@
+esphome:
+  name: habitacion_principal_switch
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret SSID
+  password: !secret pass_SSID
+  fast_connect: true
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "hab_princ_switch Fallback"
+    password: !secret pass_SSID
+# Enable logging
+logger:
+
+api:
+
+ota:
+
+web_server:
+  port: 80
+
+sensor:
+  - platform: wifi_signal
+    name: Habitacion Principal Switch Wifi Signal
+    update_interval: 10s
+  - platform: uptime
+    name: Habitacion Principal Switch test Uptime
+
+binary_sensor:
+  - platform: status
+    name: Habitacion Principal Switch Status
+    
+
+  - platform: gpio
+    pin:
+      number: 12
+#      mode: INPUT_PULLUP
+#      inverted: yes
+    name: "Interruptor"
+    internal: true
+    on_state:
+      - switch.toggle: switch_habitacion_principal
+    
+
+switch:
+  - platform: gpio
+    name: "Luces Habitacion Principal"
+    icon: "mdi:lightbulb"
+    pin: 
+      number: 13
+    id: switch_habitacion_principal
+    restore_mode: ALWAYS_OFF
+
+

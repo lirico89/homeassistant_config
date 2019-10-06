@@ -1,0 +1,56 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#  base_url: baseurl
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+sensor: !include sensors.yaml
+
+  
+lovelace:
+  mode: yaml
+  
+# Text to speech
+tts:
+  - platform: google_translate
+
+   
+
+google_assistant:
+  project_id: !secret google_project_id 
+  api_key: !secret google_api_key
+  exposed_domains:
+    - light
+    - cover
+  entity_config:
+    switch.luces_entrada:
+      name: "Luces entrada"
+      expose: true
+      room: "Entrada"
+    switch.luces_habitacion_principal:
+      name: "Luces Habitación Principal"
+      expose: true
+      room: "Habitación Principal"
+      
+      
+device_tracker:
+  - platform: luci
+    host: !secret ROUTER_IP
+    username: !secret ROUTER_ADMIN
+    password: !secret ROUTER_PASSWORD
+      
+
+homekit:
+  filter:
+    include_entities:
+      - cover.persiana_habitacion
+      - switch.luces_habitacion_principal
+      - switch.luces_entrada
+hacs:
+  token: !secret hacs_token
+

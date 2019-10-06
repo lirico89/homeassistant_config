@@ -1,0 +1,5 @@
+#cover.persiana_habitacion:
+#      device_class: blind
+#      homebridge_cover_type: rollershutter
+#      google_assistant: true
+#      google_assistant_type: switch

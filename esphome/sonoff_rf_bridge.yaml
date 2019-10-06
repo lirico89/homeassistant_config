@@ -1,0 +1,73 @@
+esphome:
+  name: sonoff_rf_bridge
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret SSID
+  password: !secret pass_SSID
+  fast_connect: true
+#  manual_ip:
+#    static_ip: 192.168.1.238
+#    gateway: 192.168.1.1
+#    subnet: 255.255.255.0
+
+
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+web_server:
+  port: 80
+  
+sensor:
+  - platform: wifi_signal
+    name: Sonoff RF Bridge Wifi Signal
+    update_interval: 10s
+  - platform: uptime
+    name: Sonoff RF Bridge Uptime
+
+
+binary_sensor:
+  - platform: status
+    name: Sonoff RF Bridge Status
+
+  - platform: remote_receiver
+    name: Pir Entrada 
+    device_class: motion
+    rc_switch_raw:
+      code: '111100000001001111111110'
+      protocol: 1
+    filters:
+      delayed_off: 3s
+
+
+  - platform: homeassistant
+    name: "entrada switch"
+    entity_id: light.luces_entrada
+    id: entrada_switch
+
+        
+
+remote_receiver:
+  pin: 4
+
+  dump: rc_switch
+
+  tolerance: 50
+  filter: 4us
+  idle: 4ms
+
+remote_transmitter:
+  pin: 5
+  carrier_duty_percent: 100%
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes

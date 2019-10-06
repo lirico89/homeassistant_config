@@ -1,0 +1,22 @@
+#Monitor de sistema
+
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /home
+      - type: memory_free
+  - platform: rpi_power
+    text_state: true
+    
+    
+    
+
+  - platform: aemet
+    name: AEMET
+    api_key: !secret aemet_api_key
+    station_id: !secret aemet_station_id
+    monitored_conditions:
+      - temperature
+      - humidity
+      - pressure
+      - precipitation

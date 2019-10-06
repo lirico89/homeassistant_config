@@ -1,0 +1,36 @@
+- id: '1568834470102'
+  alias: Luz entrada ON
+  trigger:
+  - entity_id: binary_sensor.pir_entrada
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+    condition: or  # 'when dark' condition: either after sunset or before sunrise - equivalent to a state condition on `sun.sun` of `below_horizon`
+    conditions:
+      - condition: sun
+        after: sunset
+      - condition: sun
+        before: sunrise
+  action:
+  - device_id: b256d45416af4735ac406b6c13593a29
+    domain: switch
+    entity_id: switch.luces_entrada
+    type: turn_on
+    
+    
+    
+- id: '1569020504471'
+  alias: Luz entrada OFF
+  trigger:
+  - entity_id: binary_sensor.pir_entrada
+    for: 00:00:30
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - device_id: b256d45416af4735ac406b6c13593a29
+    domain: switch
+    entity_id: switch.luces_entrada
+    type: turn_off

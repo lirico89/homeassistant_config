@@ -1,0 +1,49 @@
+esphome:
+  name: esp01_test2
+  platform: ESP8266
+  board: esp01_1m
+
+
+
+wifi:
+  ssid: !secret SSID
+  password: !secret pass_SSID
+  fast_connect: true
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp01-Test2 Fallback Hotspot"
+    password: "wlYwp69N639g"
+
+
+
+# Enable logging
+logger:
+
+# Web Server
+
+web_server:
+  port: 80
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+dallas:
+  - pin: 2
+sensor:
+  - platform: wifi_signal
+    name: esp01-test2 Wifi Signal
+    update_interval: 10s
+  - platform: uptime
+    name: esp01-test2 test Uptime
+  - platform: dallas
+    address: 0x960314687EFBFF28
+    name: "Temperature #1"
+
+
+
+binary_sensor:
+  - platform: status
+    name: esp01 test2 Status
+
