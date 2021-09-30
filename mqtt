@@ -1,0 +1,38 @@
+url: https://medium.com/swlh/using-docker-compose-to-build-zigbee-infrastructure-336983a6ad67
+
+mkdir data-mosquitto/data
+sudo chmod o+w ./data-mosquitto/data
+sudo chown 1883:1883 ./data-mosquitto/data -R
+mkdir data-mosquitto/log
+sudo touch ./data-mosquitto/log/mosquitto.log
+sudo chmod o+w ./data-mosquitto/log
+sudo chmod o+w ./data-mosquitto/log/mosquitto.log
+sudo chown 1883:1883 ./data-mosquitto/log -R
+
+
+version: '3'
+services:
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 125M
+    ports:
+       - "1883:1883"
+       - "9001:9001"
+    volumes:
+      - ./data-mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./data-mosquitto/data:/mosquitto/data
+      - ./data-mosquitto/log:/mosquitto/log
+
+
+######################restart script      
+      #!/bin/bash
+start=`date +%s`
+echo "Running restart..."
+docker-compose --compatibility down && docker-compose --compatibility up -d
+end=`date +%s`
+echo -e "\nScript has reached its end after: " $((end-start)) " seconds"
